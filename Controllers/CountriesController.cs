@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using termoservis.api.Data;
+using termoservis.api.Services;
 
 namespace termoservis.api.Controllers
 {

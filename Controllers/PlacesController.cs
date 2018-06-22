@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using termoservis.api.Data;
+using termoservis.api.Services;
 
 namespace termoservis.api.Controllers
 {
@@ -38,6 +38,14 @@ namespace termoservis.api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Retrieves the filtered places.
+        /// </summary>
+        /// <param name="keywords">The filter keywords.</param>
+        /// <param name="skip">The number of items to skip.</param>
+        /// <param name="take">The number of items to take. Required. One is minimum.</param>
+        /// <param name="nonce">The request nonce. Required.</param>
+        /// <returns>Returns the specified nonce and collection of places.</returns>
         [HttpGet("filtered")]
         public async Task<IActionResult> GetFilteredAsync(string keywords, int? skip, int? take, int? nonce)
         {

@@ -19,6 +19,10 @@ using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using termoservis.api.Models;
 using AutoMapper;
+using termoservis.api.Domain.Abstract;
+using termoservis.api.Domain.Places;
+using termoservis.api.Domain.Countries;
+using termoservis.api.Services;
 
 namespace termoservis.api
 {
@@ -73,7 +77,6 @@ namespace termoservis.api
             services.AddAutoMapper(config => {
                 config.AddProfile<PlaceProfile>();
             });
-
 
             services.AddTransient<IQueryDispatcher, QueryDispatcher>();
             services.AddTransient<ICommandDispatcher, CommandDispatcher>();
