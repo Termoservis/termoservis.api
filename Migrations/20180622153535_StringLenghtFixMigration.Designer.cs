@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using termoservis.api.Data;
@@ -9,9 +10,10 @@ using termoservis.api.Data;
 namespace termoservis.api.Migrations
 {
     [DbContext(typeof(TermoservisContext))]
-    partial class TermoservisContextModelSnapshot : ModelSnapshot
+    [Migration("20180622153535_StringLenghtFixMigration")]
+    partial class StringLenghtFixMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

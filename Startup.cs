@@ -17,6 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using termoservis.api.Models;
+using AutoMapper;
 
 namespace termoservis.api
 {
@@ -38,7 +40,7 @@ namespace termoservis.api
                     .AllowAnyMethod()
                     .AllowAnyHeader()));
 
-            services.AddDbContext<TermoservisContext>(options => options
+            services.AddDbContext<ITermoservisContext, TermoservisContext>(options => options
                     .UseNpgsql(Configuration.GetConnectionString("DefaultPgsqlServerConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -68,6 +70,21 @@ namespace termoservis.api
                                 });
                         }
                     });
+            services.AddAutoMapper(config => {
+                config.AddProfile<PlaceProfile>();
+            });
+
+
+            services.AddTransient<IQueryDispatcher, QueryDispatcher>();
+            services.AddTransient<ICommandDispatcher, CommandDispatcher>();
+            services.AddTransient<QueryPlacesFiltered>();
+            services.AddTransient<CommandCountryCreate>();
+            services.AddTransient<CommandPlaceCreate>();
+
+            services.AddTransient<IPlacesRepository, PlacesRepository>();
+            services.AddTransient<IPlacesApiService, PlacesApiService>();
+            services.AddTransient<ICountriesRepository, CountriesRepository>();
+            services.AddTransient<ICountriesApiService, CountriesApiService>();
         }
 
         public void Configure(

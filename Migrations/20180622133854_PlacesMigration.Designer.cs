@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using termoservis.api.Data;
@@ -9,9 +10,10 @@ using termoservis.api.Data;
 namespace termoservis.api.Migrations
 {
     [DbContext(typeof(TermoservisContext))]
-    partial class TermoservisContextModelSnapshot : ModelSnapshot
+    [Migration("20180622133854_PlacesMigration")]
+    partial class PlacesMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,10 +184,12 @@ namespace termoservis.api.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(2);
 
                     b.Property<string>("ShortName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(2);
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -201,18 +205,17 @@ namespace termoservis.api.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long>("CountryId");
+                    b.Property<long>("Country");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(2);
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
 
                     b.ToTable("Places");
                 });
@@ -259,14 +262,6 @@ namespace termoservis.api.Migrations
                     b.HasOne("termoservis.api.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("termoservis.api.Models.Place", b =>
-                {
-                    b.HasOne("termoservis.api.Models.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

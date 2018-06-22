@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using termoservis.api.Data;
@@ -9,9 +10,10 @@ using termoservis.api.Data;
 namespace termoservis.api.Migrations
 {
     [DbContext(typeof(TermoservisContext))]
-    partial class TermoservisContextModelSnapshot : ModelSnapshot
+    [Migration("20180622134234_PlaceCountryMigration")]
+    partial class PlaceCountryMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,10 +184,12 @@ namespace termoservis.api.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(2);
 
                     b.Property<string>("ShortName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(2);
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -204,7 +208,8 @@ namespace termoservis.api.Migrations
                     b.Property<long>("CountryId");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(2);
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
