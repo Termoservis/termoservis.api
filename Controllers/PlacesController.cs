@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using termoservis.api.Data;
 using termoservis.api.Services;
 
 namespace termoservis.api.Controllers
@@ -23,15 +25,15 @@ namespace termoservis.api.Controllers
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                return BadRequest("argumnet name is required.");
+                return this.BadRequest("places-create-name-required", "argumnet name is required.");
             }
             if (!countryId.HasValue)
             {
-                return BadRequest("argument countryId is required.");
+                return this.BadRequest("places-create-countryid-required", "argument countryId is required.");
             }
             if (countryId.Value <= 0) 
             {
-                return BadRequest("argument countryId is invalid. Must be larger than zero.");
+                return this.BadRequest("places-create-countryid-outofrange", "argument countryId is invalid. Must be larger than zero.");
             }
 
             var result = await this.placesApiService.CreatePlaceAsync(name, countryId.Value);
@@ -47,34 +49,43 @@ namespace termoservis.api.Controllers
         /// <param name="nonce">The request nonce. Required.</param>
         /// <returns>Returns the specified nonce and collection of places.</returns>
         [HttpGet("filtered")]
+        [ProducesResponseType(typeof(PlacesFilteredDto), 200)]
+        [ProducesResponseType(typeof(ApiError.Error), 400)]
         public async Task<IActionResult> GetFilteredAsync(string keywords, int? skip, int? take, int? nonce)
         {
             if (!nonce.HasValue)
             {
-                return BadRequest("argument nonce is required.");
+                return this.BadRequest("nonce-required", "argument nonce is required.");
             }
             if (skip.HasValue && skip < 0)
             {
-                return BadRequest("argument skip can't be less than zero.");
+                return this.BadRequest("places-filtered-skip-outofrange", "argument skip can't be less than zero.");
             }
             if (!take.HasValue)
             {
-                return BadRequest("argument take is required.");
+                return this.BadRequest("places-filtered-take-required", "argument take is required.");
             }
             if (take.HasValue && take <= 0)
             {
-                return BadRequest("argument take is invalid. Must be larger than zero.");
+                return this.BadRequest("places-filtered-take-outofrange", "argument take is invalid. Must be larger than zero.");
             }
 
-            var result = new
+            var result = new PlacesFilteredDto
             {
-                places = await this.placesApiService.QueryPlacesByKeywordsAsync(
+                Places = await this.placesApiService.QueryPlacesByKeywordsAsync(
                     keywords ?? string.Empty, 
                     skip ?? 0, 
                     take.Value),
-                nonce = nonce
+                Nonce = nonce.Value
             };
             return Ok(result);
+        }
+
+        public class PlacesFilteredDto 
+        {
+            public IEnumerable<PlaceDto> Places { get; set; }
+
+            public int Nonce { get; set; }
         }
     }
 }
